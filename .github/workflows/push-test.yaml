@@ -23,11 +23,8 @@ jobs:
 
       - name: Debug Environment Variables
         run: |
-          echo "EXECUTION_ROLE: $EXECUTION_ROLE"
-          echo "TASK_DEFINITION_FAMILY: $TASK_DEFINITION_FAMILY"
-        env:
-          EXECUTION_ROLE: ${{ env.EXECUTION_ROLE }}
-          TASK_DEFINITION_FAMILY: ${{ env.TASK_DEFINITION_FAMILY }}
+          echo ${{ env.EXECUTION_ROLE }}
+          echo ${{ env.TASK_DEFINITION_FAMILY }}
 
       - name: Prepare task definition template
         run: cat ecs-task-definition.json | envsubst > task-definition.json
