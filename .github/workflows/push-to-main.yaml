@@ -13,6 +13,7 @@ env:
   ECS_TASK_DEFINITION: task-definition.json
   ECS_TASK_DEFINITION_TEMPLATE: ecs-task-definition.json
   CONTAINER_NAME: aws-esc-sample-app
+  PORT: 3000
 
 jobs:
   build-and-deploy:
@@ -53,6 +54,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
+          PORT: ${{ env.PORT }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
