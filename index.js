@@ -28,7 +28,4 @@ app.listen(port, () => {
 });
 
 // test coverage (+ in github pipeline)
-// set up aws creds
-// pipeline
-// ECS
 // docker run -e PORT=3000 -p 3000:3000 aws-esc-sample
