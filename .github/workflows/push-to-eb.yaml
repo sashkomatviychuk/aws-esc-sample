@@ -1,0 +1,71 @@
+name: Push to elastic beanstalk
+
+on:
+  push:
+    branches:
+      - beanstalk
+
+env:
+  AWS_REGION: eu-west-1
+  APP_NAME: aws-esc-eb-sample
+  ENV_NAME: development
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # - name: Set env to dev
+      #   if: endsWith(github.ref, '/dev')
+      #   run: |
+      #     echo "application_name=dev-nodejs-app" >> $GITHUB_ENV
+      #     echo "environment_name=Devnodejsapp-env" >> $GITHUB_ENV
+      #     echo "NODE_ENV=development" >> $GITHUB_ENV
+
+      # - name: Set env to production
+      #   if: endsWith(github.ref, '/main')
+      #   run: |
+      #     echo "application_name=nodejs-app" >> $GITHUB_ENV
+      #     echo "environment_name=Nodejsapp-env" >> $GITHUB_ENV
+      #     echo "NODE_ENV=production" >> $GITHUB_ENV
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Deploy app to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{secrets.ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
+          application_name: ${{ env.APP_NAME }}
+          environment_name: ${{ env.ENV_NAME }}
+          region: ${{ env.AWS_REGION }}
+          version_label: '${{ github.sha }}'
+          deployment_package: deploy.zip
