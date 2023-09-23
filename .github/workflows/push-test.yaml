@@ -30,4 +30,4 @@ jobs:
           image: arn:aws:iam::23444223/image:1
 
       - name: Print task definition
-        run: echo "${{ steps.task-def.outputs.task-definition }}"
+        run: cat ${{ steps.task-def.outputs.task-definition }}
