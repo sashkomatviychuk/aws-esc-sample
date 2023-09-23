@@ -10,7 +10,8 @@ env:
   ECR_REPOSITORY: aws-esc-sample
   ECS_SERVICE: hello-svc
   ECS_CLUSTER: aws-esc-sample
-  ECS_TASK_DEFINITION: ecs-task-definition.json
+  ECS_TASK_DEFINITION: task-definition.json
+  ECS_TASK_DEFINITION_TEMPLATE: ecs-task-definition.json
   CONTAINER_NAME: aws-esc-sample-app
 
 jobs:
@@ -25,15 +26,20 @@ jobs:
         run: |
           echo ${{ vars.EXECUTION_ROLE }}
           echo ${{ vars.TASK_DEFINITION_FAMILY }}
+          echo $ECS_TASK_DEFINITION_TEMPLATE
 
       - name: Prepare task definition template
-        run: cat ecs-task-definition.json | envsubst > task-definition.json
+        run: cat $ECS_TASK_DEFINITION_TEMPLATE | envsubst > $ECS_TASK_DEFINITION
+        env:
+          EXECUTION_ROLE: ${{ vars.EXECUTION_ROLE }}
+          TASK_ROLE: ${{ vars.TASK_ROLE }}
+          TASK_DEFINITION_FAMILY: ${{ vars.TASK_DEFINITION_FAMILY }}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
+          task-definition: $ECS_TASK_DEFINITION
           container-name: ${{ env.CONTAINER_NAME }}
           image: arn:aws:iam::23444223/image:1
 
