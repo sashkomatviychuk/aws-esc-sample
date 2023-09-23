@@ -23,6 +23,10 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/ping', (req, res) => {
+  res.json('pong');
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
