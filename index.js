@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const os = require('os');
+const { listObjects } = require('./utils/aws.utils');
 
 const app = express();
 const port = process.env.PORT;
@@ -25,6 +26,11 @@ app.get('/', (req, res) => {
 
 app.get('/ping', (req, res) => {
   res.json('pong');
+});
+
+app.get('/list/:prefix', async (req, res) => {
+  const data = await listObjects(req.params.prefix);
+  return res.json(data);
 });
 
 app.listen(port, () => {

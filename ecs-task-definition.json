@@ -17,6 +17,10 @@
         {
           "name": "PORT",
           "value": "${PORT}"
+        },
+        {
+          "name": "BUCKET_NAME",
+          "value": "${BUCKET_NAME}"
         }
       ],
       "environmentFiles": [],
