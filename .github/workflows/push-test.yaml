@@ -1,0 +1,33 @@
+name: Test push
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: eu-west-1
+  ECR_REPOSITORY: aws-esc-sample
+  ECS_SERVICE: hello-svc
+  ECS_CLUSTER: aws-esc-sample
+  ECS_TASK_DEFINITION: ecs-task-definition.json
+  CONTAINER_NAME: aws-esc-sample-app
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ ECS_TASK_DEFINITION }}
+          container-name: ${{ CONTAINER_NAME }}
+          image: arn:aws:iam::23444223/image:1
+
+      - name: Print task definition
+        run: echo "${{ steps.task-def.outputs.task-definition }}"
