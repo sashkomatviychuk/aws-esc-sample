@@ -35,7 +35,6 @@
   "executionRoleArn": "${EXECUTION_ROLE}",
   "networkMode": "awsvpc",
   "volumes": [],
-  "requiresAttributes": [],
   "placementConstraints": [],
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "512",
