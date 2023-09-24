@@ -65,8 +65,8 @@ jobs:
       - name: Deploy app to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v16
         with:
-          aws_access_key: ${{secrets.ACCESS_KEY_ID}}
-          aws_secret_key: ${{secrets.SECRET_ACCESS_KEY}}
+          aws_access_key: ${{secrets.EB_ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.EB_SECRET_ACCESS_KEY}}
           application_name: ${{ env.APP_NAME }}
           environment_name: ${{ env.ENV_NAME }}
           region: ${{ env.AWS_REGION }}
