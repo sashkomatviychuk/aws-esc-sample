@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/ping', (req, res) => {
-  res.json('pong');
+  res.json('pong from beanstalk branch');
 });
 
 app.get('/list/:prefix', async (req, res) => {
